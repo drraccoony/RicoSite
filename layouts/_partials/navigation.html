@@ -1,0 +1,12 @@
+{{- $current := . -}}
+<ul class="nav-list">
+    {{- range (slice site.Home) | append site.Home.Pages }}
+        {{- $active := or ($current.Eq .) (and (not .IsHome) (.IsAncestor $current)) }}
+        <li>
+            <a href="{{ .RelPermalink }}" class="{{ if $active }}active{{ end }}">
+                {{ with .Params.menu_icon }}<i class="nav-icon {{ . }}" aria-hidden="true"></i>{{ end }}
+                <span class="nav-label">{{ .LinkTitle }}</span>
+            </a>
+        </li>
+    {{- end }}
+</ul>

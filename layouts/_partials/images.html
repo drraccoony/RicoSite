@@ -1,0 +1,22 @@
+{{- /*
+  Returns the page's image resources. If front matter has `media_order`
+  (comma-separated file names), those images come first in that order,
+  followed by any remaining images in file-name order.
+*/ -}}
+{{- $images := .Resources.ByType "image" -}}
+{{- $result := $images -}}
+{{- with .Params.media_order -}}
+  {{- $ordered := slice -}}
+  {{- range split . "," -}}
+    {{- with $images.GetMatch (trim . " ") -}}
+      {{- $ordered = $ordered | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- range $images -}}
+    {{- if not (in $ordered .) -}}
+      {{- $ordered = $ordered | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $result = $ordered -}}
+{{- end -}}
+{{- return $result -}}

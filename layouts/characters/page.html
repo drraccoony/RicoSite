@@ -1,0 +1,33 @@
+{{ define "main" }}
+    <article class="detail-page">
+        <header class="detail-header">
+            <div class="detail-header-main">
+                <h1>{{ .Title }}</h1>
+                <div class="detail-meta">
+                    {{ with .Params.species }}<span class="tag tag-brown">{{ . }}</span>{{ end }}
+                    {{ with .Params.pronouns }}<span class="tag tag-olive">{{ . }}</span>{{ end }}
+                </div>
+                {{ with .Params.tagline }}<p class="page-subtitle">{{ . }}</p>{{ end }}
+            </div>
+        </header>
+
+        <div class="detail-columns">
+            <div class="detail-main">
+                {{ with .Content }}
+                    <div class="detail-bio">{{ . }}</div>
+                {{ end }}
+            </div>
+
+            <aside class="detail-sidebar">
+                {{ if partial "images.html" . }}
+                    <section class="gallery-section">
+                        <h2>Gallery</h2>
+                        {{ partial "gallery.html" (dict "page" . "label" "image") }}
+                    </section>
+                {{ else }}
+                    <p class="empty-note">No gallery images yet. Drop image files into this character's folder to fill the gallery.</p>
+                {{ end }}
+            </aside>
+        </div>
+    </article>
+{{ end }}

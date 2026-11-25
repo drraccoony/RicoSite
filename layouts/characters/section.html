@@ -1,0 +1,29 @@
+{{ define "main" }}
+    <section class="landing-intro">
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.subtitle }}<p class="page-subtitle">{{ . }}</p>{{ end }}
+        {{ .Content }}
+    </section>
+
+    <section class="card-grid">
+        {{ range $character := .Pages }}
+            <a class="card" href="{{ .RelPermalink }}">
+                <div class="card-image">
+                    {{ with partial "first-image.html" . }}
+                        {{ $thumb := .Fill "500x500 Center webp" }}
+                        <img src="{{ $thumb.RelPermalink }}" alt="{{ $character.Title }}" loading="lazy">
+                    {{ else }}
+                        <div class="card-placeholder" aria-hidden="true">🐾</div>
+                    {{ end }}
+                </div>
+                <div class="card-body">
+                    <h2>{{ .Title }}</h2>
+                    {{ with .Params.species }}<span class="tag tag-brown">{{ . }}</span>{{ end }}
+                    {{ with .Params.tagline }}<p class="card-tagline">{{ . }}</p>{{ end }}
+                </div>
+            </a>
+        {{ else }}
+            <p class="empty-note">No characters yet. Add a folder with an <code>index.md</code> under <code>content/characters/</code> to get started.</p>
+        {{ end }}
+    </section>
+{{ end }}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.Lang | default "en" }}" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <title>{{ with .Title }}{{ . }} | {{ end }}{{ site.Title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    {{ partial "metadata.html" . }}
+    <link rel="canonical" href="{{ .Permalink }}" />
+    <style>
+      :root {
+        --olive: {{ site.Params.oliveColor | default "#8a9a5b" | safeCSS }};
+        --brown: {{ site.Params.brownColor | default "#a97c50" | safeCSS }};
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    {{ with resources.Get "css/theme.css" | minify | fingerprint }}
+        <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+    {{ end }}
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap site-header-inner">
+            <a class="site-brand" href="{{ "/" | relURL }}">
+                <span class="site-title">{{ site.Title }}</span>
+                {{ with site.Params.tagline }}<span class="site-tagline">{{ . }}</span>{{ end }}
+            </a>
+            <nav class="site-nav" aria-label="Primary">
+                {{ partial "navigation.html" . }}
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-main">
+        <div class="wrap">
+            {{ block "main" . }}{{ end }}
+        </div>
+    </main>
+
+    {{ partial "footer.html" . }}
+
+    {{ with resources.Get "js/gallery.js" | minify | fingerprint }}
+        <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+    {{ end }}
+</body>
+</html>

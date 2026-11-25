@@ -1,0 +1,43 @@
+{{ define "main" }}
+    <article class="detail-page">
+        <header class="detail-header">
+            <div class="detail-header-main">
+                <h1>{{ .Title }}</h1>
+                {{ with .Params.status }}
+                    <div class="detail-meta">{{ partial "status-tag.html" $ }}</div>
+                {{ end }}
+                {{ with .Params.tagline }}<p class="page-subtitle">{{ . }}</p>{{ end }}
+            </div>
+
+            {{ if or .Params.repo_url .Params.demo_url }}
+                <div class="social-links project-links">
+                    {{ with .Params.repo_url }}
+                        <a class="social-pill pill-static" href="{{ . }}" target="_blank" rel="noopener noreferrer">
+                            <i class="social-icon fa-brands fa-github" aria-hidden="true"></i>
+                            <span class="social-label">Repository</span>
+                        </a>
+                    {{ end }}
+                    {{ with .Params.demo_url }}
+                        <a class="social-pill pill-static" href="{{ . }}" target="_blank" rel="noopener noreferrer">
+                            <i class="social-icon fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                            <span class="social-label">Live Demo</span>
+                        </a>
+                    {{ end }}
+                </div>
+            {{ end }}
+        </header>
+
+        {{ partial "tech-tags.html" . }}
+
+        {{ with .Content }}
+            <div class="detail-bio">{{ . }}</div>
+        {{ end }}
+
+        {{ if partial "images.html" . }}
+            <section class="gallery-section">
+                <h2>Screenshots</h2>
+                {{ partial "gallery.html" (dict "page" . "label" "screenshot") }}
+            </section>
+        {{ end }}
+    </article>
+{{ end }}

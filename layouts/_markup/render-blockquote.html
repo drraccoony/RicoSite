@@ -1,0 +1,11 @@
+{{- if eq .Type "alert" -}}
+{{- $icons := dict "note" "fa-circle-info" "tip" "fa-lightbulb" "important" "fa-circle-exclamation" "warning" "fa-triangle-exclamation" "caution" "fa-circle-xmark" -}}
+<blockquote class="alert alert-{{ .AlertType }}">
+    <p class="alert-heading"><i class="fa-solid {{ index $icons .AlertType | default "fa-circle-info" }}" aria-hidden="true"></i> {{ .AlertTitle | default (.AlertType | title) }}</p>
+    {{ .Text }}
+</blockquote>
+{{- else -}}
+<blockquote{{ with .Attributes.class }} class="{{ . }}"{{ end }}>
+    {{ .Text }}
+</blockquote>
+{{- end -}}

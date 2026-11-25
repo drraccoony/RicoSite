@@ -1,0 +1,5 @@
+{{- with .Params.status -}}
+<span class="tag {{ if eq . "active" }}tag-olive{{ else }}tag-brown{{ end }}">
+    {{- if eq . "wip" }}Work in Progress{{ else if eq . "archived" }}Archived{{ else }}Active{{ end -}}
+</span>
+{{- end -}}

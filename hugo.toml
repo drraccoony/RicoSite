@@ -1,0 +1,30 @@
+baseURL = "https://drraccoon.me/"
+title = "DrRaccoon.me"
+locale = "en-us"
+
+# Project "date:" values in front matter are allowed to be in the future.
+buildFuture = true
+disableKinds = ["taxonomy", "term", "rss"]
+
+[params]
+  description = "A personal den for my furry characters — bios and image galleries."
+  tagline = ""
+  oliveColor = "#8a9a5b"
+  brownColor = "#a97c50"
+
+  [params.author]
+    name = "Rico"
+
+[markup.goldmark.renderer]
+  # Allow raw HTML inside Markdown, like Grav did.
+  unsafe = true
+
+[imaging]
+  resampleFilter = "Lanczos"
+  [imaging.jpeg]
+    quality = 80
+  [imaging.webp]
+    quality = 80
+
+[caches.images]
+  dir = ":cacheDir/images"

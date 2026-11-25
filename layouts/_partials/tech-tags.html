@@ -1,0 +1,7 @@
+{{- with .Params.tech -}}
+<div class="tech-tags">
+    {{- range split . "," }}
+        {{- with trim . " " }}<span class="tag tag-brown">{{ . }}</span>{{ end }}
+    {{- end }}
+</div>
+{{- end -}}

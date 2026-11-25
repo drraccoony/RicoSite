@@ -1,0 +1,14 @@
+{{- /* Context: dict "page" <page> "label" <alt-text suffix> */ -}}
+{{- $page := .page -}}
+{{- $images := partial "images.html" $page -}}
+{{- if $images }}
+    <div class="gallery">
+        {{- range $images }}
+            {{- $thumb := .Fill "400x400 Center webp" }}
+            {{- $caption := .Params.caption | default "" }}
+            <a class="gallery-item" href="{{ .RelPermalink }}" data-caption="{{ $caption }}">
+                <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ $caption | default (printf "%s %s" $page.Title $.label) }}" loading="lazy">
+            </a>
+        {{- end }}
+    </div>
+{{- end -}}

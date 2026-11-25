@@ -1,0 +1,80 @@
+{{ define "main" }}
+    <section class="landing-intro">
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.subtitle }}<p class="page-subtitle">{{ . }}</p>{{ end }}
+        {{ .Content }}
+    </section>
+
+    {{ $categories := slice }}
+    {{ range .Pages }}
+        {{ range split (.Params.category | default "") "," }}
+            {{ with trim . " " }}
+                {{ if not (in $categories .) }}{{ $categories = $categories | append . }}{{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+
+    {{ with .Pages }}
+        <div class="grid-toolbar">
+            {{ with $categories }}
+                <div class="category-filter" role="group" aria-label="Filter by category">
+                    <button type="button" class="category-filter-btn is-active" data-category="all">All</button>
+                    {{ range . }}
+                        <button type="button" class="category-filter-btn" data-category="{{ . }}">{{ . }}</button>
+                    {{ end }}
+                </div>
+            {{ end }}
+            <div class="toolbar-controls">
+                <div class="sort-control">
+                    <label for="project-sort" class="sort-label">Sort Order</label>
+                    <select id="project-sort" class="sort-select">
+                        <option value="date" selected>Project Date</option>
+                        <option value="alpha">Alphabetical</option>
+                        <option value="active">Active</option>
+                    </select>
+                </div>
+                <div class="view-toggle" role="group" aria-label="View mode">
+                    <button type="button" class="view-toggle-btn" data-view="gallery" aria-pressed="true">
+                        <i class="fa-solid fa-table-cells" aria-hidden="true"></i> Gallery
+                    </button>
+                    <button type="button" class="view-toggle-btn" data-view="list" aria-pressed="false">
+                        <i class="fa-solid fa-list" aria-hidden="true"></i> List
+                    </button>
+                </div>
+            </div>
+        </div>
+    {{ end }}
+
+    <section class="card-grid" id="project-grid">
+        {{ range $index, $project := .Pages }}
+            {{ $cats := slice }}
+            {{ range split (.Params.category | default "") "," }}
+                {{ with trim . " " }}{{ $cats = $cats | append . }}{{ end }}
+            {{ end }}
+            {{ $ranks := dict "active" 0 "wip" 1 "archived" 2 }}
+            {{ $statusRank := 3 }}
+            {{ with .Params.status }}
+                {{ if isset $ranks . }}{{ $statusRank = index $ranks . }}{{ end }}
+            {{ end }}
+            {{ $date := 0 }}
+            {{ if not .Date.IsZero }}{{ $date = .Date.Unix }}{{ end }}
+            <a class="card" href="{{ .RelPermalink }}" data-categories="{{ delimit $cats "|" }}" data-date="{{ $date }}" data-order="{{ $index }}" data-title="{{ .Title }}" data-status-rank="{{ $statusRank }}">
+                <div class="card-image">
+                    {{ with partial "first-image.html" . }}
+                        {{ $thumb := .Fill "500x500 Center webp" }}
+                        <img src="{{ $thumb.RelPermalink }}" alt="{{ $project.Title }}" loading="lazy">
+                    {{ else }}
+                        <div class="card-placeholder" aria-hidden="true">🛠️</div>
+                    {{ end }}
+                </div>
+                <div class="card-body">
+                    <h2>{{ .Title }}</h2>
+                    {{ partial "status-tag.html" . }}
+                    {{ with .Params.tagline }}<p class="card-tagline">{{ . }}</p>{{ end }}
+                </div>
+            </a>
+        {{ else }}
+            <p class="empty-note">No projects yet. Add a folder with an <code>index.md</code> under this section's folder in <code>content/</code> to get started.</p>
+        {{ end }}
+    </section>
+{{ end }}

@@ -1,0 +1,3 @@
+{{- $first := false -}}
+{{- with partial "images.html" . }}{{ $first = index . 0 }}{{ end -}}
+{{- return $first -}}

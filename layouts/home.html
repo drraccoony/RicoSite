@@ -1,0 +1,97 @@
+{{ define "main" }}
+    {{ $sections := site.Home.Pages }}
+
+    {{ $heroImages := slice }}
+    {{ range $sections }}
+        {{ if in (slice "characters" "projects") .Type }}
+            {{ range .Pages }}
+                {{ range first 2 (partial "images.html" .) }}
+                    {{ $heroImages = $heroImages | append . }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+
+    <section class="profile-hero">
+        {{ with $heroImages | shuffle }}
+            <div class="hero-backdrop" aria-hidden="true">
+                <div class="hero-track">
+                    {{ range seq 2 }}
+                        {{ range $heroImages }}
+                            <div class="hero-strip" style="background-image: url('{{ (.Resize "600x webp q75").RelPermalink | safeCSS }}')"></div>
+                        {{ end }}
+                    {{ end }}
+                </div>
+            </div>
+        {{ end }}
+
+        <div class="profile-hero-content">
+            {{ with partial "first-image.html" . }}
+                {{ $avatar := .Fill "320x320 Center webp" }}
+                <div class="profile-avatar-wrap">
+                    <img class="profile-avatar" src="{{ $avatar.RelPermalink }}" width="160" height="160" alt="{{ $.Title }}">
+                </div>
+            {{ end }}
+            <h1>{{ .Title }}</h1>
+            {{ with .Content }}
+                <div class="profile-intro">{{ . }}</div>
+            {{ end }}
+
+            {{ with .Params.socials }}
+                <div class="social-links">
+                    {{ range . }}
+                        <a class="social-pill" href="{{ .url }}" target="_blank" rel="noopener noreferrer">
+                            {{ with .icon }}<i class="social-icon {{ . }}" aria-hidden="true"></i>{{ end }}
+                            <span class="social-label">{{ .label }}</span>
+                        </a>
+                    {{ end }}
+                </div>
+            {{ else }}
+                <p class="empty-note">Add your social links to the <code>socials</code> list in <code>content/_index.md</code>.</p>
+            {{ end }}
+        </div>
+    </section>
+
+    {{ with .Params.featured_project }}
+        {{ with site.GetPage . }}
+            {{ $featured := . }}
+            <section class="featured-project">
+                <span class="featured-label">Featured &mdash; {{ .Parent.Title }}</span>
+                <a class="featured-project-card" href="{{ .RelPermalink }}">
+                    <div class="featured-project-image">
+                        {{ with partial "first-image.html" . }}
+                            {{ $thumb := .Fill "500x500 Center webp" }}
+                            <img src="{{ $thumb.RelPermalink }}" alt="{{ $featured.Title }}" loading="lazy">
+                        {{ else }}
+                            <div class="card-placeholder" aria-hidden="true">🛠️</div>
+                        {{ end }}
+                    </div>
+                    <div class="featured-project-body">
+                        <div class="featured-project-title">
+                            <h2>{{ .Title }}</h2>
+                            {{ partial "status-tag.html" . }}
+                        </div>
+                        {{ with .Params.tagline }}<p class="card-tagline">{{ . }}</p>{{ end }}
+                        {{ with .Summary | plainify | htmlUnescape | strings.TrimSpace | truncate 160 }}
+                            <p class="featured-project-excerpt">{{ . }}</p>
+                        {{ end }}
+                        {{ partial "tech-tags.html" . }}
+                    </div>
+                </a>
+            </section>
+        {{ else }}
+            {{ warnf "featured_project %q was not found" . }}
+        {{ end }}
+    {{ end }}
+
+    {{ with $sections }}
+        <section class="offer-grid">
+            {{ range . }}
+                <a class="offer-card" href="{{ .RelPermalink }}">
+                    <h2>{{ .Title }}</h2>
+                    {{ with .Params.subtitle }}<p>{{ . }}</p>{{ end }}
+                </a>
+            {{ end }}
+        </section>
+    {{ end }}
+{{ end }}
