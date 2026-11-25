@@ -7,7 +7,7 @@ buildFuture = true
 disableKinds = ["taxonomy", "term", "rss"]
 
 [params]
-  description = "A personal den for my furry characters — bios and image galleries."
+  description = "Personal website with characters, bios and image galleries."
   tagline = ""
   oliveColor = "#8a9a5b"
   brownColor = "#a97c50"

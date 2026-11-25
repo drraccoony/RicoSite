@@ -1,64 +1,47 @@
-# DrRaccoon.me
+# drraccoon.me
 
-My personal site, built with [Hugo](https://gohugo.io) and published to GitHub Pages.
-Every page is a Markdown file in [`content/`](content/). Push to `master` and the
-[workflow](.github/workflows/hugo.yaml) rebuilds and deploys the site automatically.
+Source for my personal site: my characters, projects I've worked on, and a bit about me.
+It's a [Hugo](https://gohugo.io) site hosted on GitHub Pages. Pages are just Markdown files
+in `content/`, and pushing to `master` rebuilds and deploys it.
 
-## Where things live
+## Editing stuff
 
-```
-content/
-├── _index.md                  Home page: intro text, social links, featured project
-├── avatar.png                 Home page avatar (first image in content/)
-├── about/index.md             About page
-├── characters/
-│   ├── _index.md              Characters landing page
-│   └── rico/                  One folder per character
-│       ├── index.md           Bio + details
-│       └── *.png / *.jpg      Gallery images (drop them in, they show up automatically)
-├── projects/
-│   ├── _index.md              Projects landing page
-│   └── polo-godot/            One folder per project (same idea as characters)
-└── professional/_index.md     Uses the same layout as projects; add project folders here too
-```
+Each character and project has its own folder with an `index.md` and its images. To change
+some text, edit the Markdown under the `---` block and push. Any image dropped into a folder
+shows up in that page's gallery on its own.
 
-The folder name becomes the URL, e.g. `content/projects/polo-godot/` → `/projects/polo-godot/`.
-
-## Common edits
-
-**Edit text:** open the page's `index.md` (or `_index.md`), edit the Markdown below the `---` block, and commit.
-
-**Add a character or project:** make a new folder with an `index.md` and some images, or let Hugo
-create one from a template:
+To add something new, make a folder by hand or have Hugo generate one:
 
 ```sh
-hugo new content characters/new-character/index.md
-hugo new content projects/new-project/index.md
+hugo new content characters/some-character/index.md
+hugo new content projects/some-project/index.md
 ```
 
-New projects start with `draft: true`. Remove that line (or set it to `false`) to publish.
+New projects start out as `draft: true`, so delete that line when it's ready to go live.
 
-**Front matter options** (the `---` block at the top of each file):
+## Front matter cheat sheet
 
-| Key | Where | What it does |
+The `---` block at the top of each file controls a few things:
+
+| Key | Used on | Does |
 | --- | --- | --- |
-| `title` | everywhere | Page title / nav label |
-| `subtitle` | sections, About | Shown under the title and on the home page cards |
-| `menu_icon` | top-level pages | Font Awesome classes for the nav icon, e.g. `fa-solid fa-paw` |
-| `weight` | everywhere | Sort order: lower numbers come first (nav, cards, lists) |
-| `draft: true` | everywhere | Hide the page from the published site |
+| `title` | everything | Page title and nav label |
+| `subtitle` | sections, About | Line under the title, also shown on the home page cards |
+| `menu_icon` | top-level pages | Font Awesome icon in the nav, like `fa-solid fa-paw` |
+| `weight` | everything | Sort order, lower comes first |
+| `draft: true` | everything | Hides the page |
 | `species`, `pronouns` | characters | Tags on the character page |
-| `tagline` | characters, projects | One-liner on cards and page header |
+| `tagline` | characters, projects | One-liner on cards and the page header |
 | `status` | projects | `active`, `wip`, or `archived` |
-| `category` | projects | Comma-separated; drives the filter buttons |
-| `tech` | projects | Comma-separated tech-stack tags |
-| `repo_url`, `demo_url` | projects | "Repository" / "Live Demo" buttons |
-| `date` | projects | Optional; used by the "Project Date" sort |
-| `media_order` | characters, projects | Comma-separated image file names to set the gallery order. The first image is also the card thumbnail |
-| `socials` | home | List of `label` / `url` / `icon` social links |
-| `featured_project` | home | Path of a project to spotlight, e.g. `/projects/polo-godot` |
+| `category` | projects | Comma-separated, drives the filter buttons |
+| `tech` | projects | Comma-separated tech tags |
+| `repo_url`, `demo_url` | projects | Repository / Live Demo buttons |
+| `date` | projects | Optional, used by the "Project Date" sort |
+| `media_order` | characters, projects | Comma-separated file names to order the gallery (first one is the thumbnail) |
+| `socials` | home | Social links (`label`, `url`, `icon`) |
+| `featured_project` | home | Project to show off on the home page, like `/projects/polo-godot` |
 
-Image captions can be added with Hugo's `resources` front matter:
+Image captions:
 
 ```yaml
 resources:
@@ -67,30 +50,21 @@ resources:
       caption: 'Art by someone'
 ```
 
-GitHub-style alerts work in any page:
+GitHub-style callouts work too:
 
 ```markdown
 > [!NOTE]
 > Something worth knowing.
 ```
 
-Site-wide settings (site title, description, theme colors, header tagline) are in [`hugo.toml`](hugo.toml).
+Site title, description, colors, and the header tagline live in `hugo.toml`.
 
-## Preview locally (optional)
+## Running it locally
 
-Install Hugo **extended** (`winget install Hugo.Hugo.Extended`), then:
+Needs Hugo extended (`winget install Hugo.Hugo.Extended`). Then run `hugo server` and open
+http://localhost:1313. Add `-D` to see drafts.
 
-```sh
-hugo server
-```
+## Hosting
 
-Open http://localhost:1313. Drafts are hidden; use `hugo server -D` to preview them.
-
-## One-time GitHub setup
-
-1. Create a repository and push this folder to its `master` branch.
-2. In the repository, go to **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
-3. For the custom domain, `static/CNAME` already contains `drraccoon.me`. Under **Settings → Pages → Custom domain**,
-   enter `drraccoon.me`, then point DNS at GitHub Pages
-   ([instructions](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)).
-   Enable **Enforce HTTPS** once the certificate is issued.
+GitHub Pages is set to deploy from GitHub Actions (see `.github/workflows/hugo.yaml`), and
+`static/CNAME` points it at drraccoon.me.
