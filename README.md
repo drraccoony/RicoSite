@@ -1,7 +1,7 @@
 # DrRaccoon.me
 
 My personal site, built with [Hugo](https://gohugo.io) and published to GitHub Pages.
-Every page is a Markdown file in [`content/`](content/). Push to `main` and the
+Every page is a Markdown file in [`content/`](content/). Push to `master` and the
 [workflow](.github/workflows/hugo.yaml) rebuilds and deploys the site automatically.
 
 ## Where things live
@@ -88,7 +88,7 @@ Open http://localhost:1313. Drafts are hidden; use `hugo server -D` to preview t
 
 ## One-time GitHub setup
 
-1. Create a repository and push this folder to its `main` branch.
+1. Create a repository and push this folder to its `master` branch.
 2. In the repository, go to **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
 3. For the custom domain, `static/CNAME` already contains `drraccoon.me`. Under **Settings → Pages → Custom domain**,
    enter `drraccoon.me`, then point DNS at GitHub Pages
